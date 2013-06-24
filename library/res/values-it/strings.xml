@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ok">OK</string>
+    
+    <!--Tutorial Buttons -->
+    <string name="begin_tut">Inizia il tour guidato</string>
+    <string name="next_tut">Avanti</string>
+    <string name="skip_tut">Salta</string>
+    
+</resources>

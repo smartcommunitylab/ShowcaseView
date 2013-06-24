@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +18,13 @@ public abstract class BaseTutorialActivity extends Activity implements
 		OnShowcaseEventListener {
 
 	private final static String PASSED_POSITION = "passedPos";
-	private final static String PASSED_ID = "passedId";
 	private final static String PASSED_RADIUS = "passedRadius";
 	private final static String PASSED_TITLE = "passedTitle";
 	private final static String PASSED_DESC = "passedDesc";
 	private final static String PASSED_TITLE_COLOR = "passedTitleColor";
 	private final static String PASSED_DESC_COLOR = "passedDescColor";
+	private final static String PASSED_IS_LAST = "passedLastTut";
+	
 	public static final String RESULT_DATA = "tutResult";
 	public static final String REDO = "redoTut";
 	public static final String OK = "okTut";
@@ -31,12 +33,13 @@ public abstract class BaseTutorialActivity extends Activity implements
 	private Button skip;
  
 	public static void newIstance(Activity ctx, int[] position,int radius,Integer titleColor,Integer descColor,
-			String title, String description, int requestCode, Class<? extends BaseTutorialActivity> act) {
+			String title, String description,boolean isLast, int requestCode, Class<? extends BaseTutorialActivity> act) {
 		Intent caller = new Intent(ctx,act);
 		caller.putExtra(PASSED_POSITION, position);
 		caller.putExtra(PASSED_TITLE, title);
 		caller.putExtra(PASSED_DESC, description);
 		caller.putExtra(PASSED_RADIUS, radius);
+		caller.putExtra(PASSED_IS_LAST, isLast);
 		if(titleColor!=null)
 			caller.putExtra(PASSED_TITLE_COLOR, titleColor);
 		if(descColor!=null)
@@ -76,7 +79,13 @@ public abstract class BaseTutorialActivity extends Activity implements
 	private void setParams(Intent intent) {
 		ConfigOptions co = new ConfigOptions();
 		
-		co.buttonText = getString(R.string.next_tut);
+		
+		if(intent.getExtras().getBoolean(PASSED_IS_LAST)){
+			co.buttonText = getString(R.string.ok);
+			skip.setVisibility(View.GONE);
+		}
+		else
+			co.buttonText = getString(R.string.next_tut);
 		
 		if(intent.getExtras().getInt(PASSED_DESC_COLOR,Integer.MIN_VALUE)!=Integer.MIN_VALUE)
 			co.detailTextColor = intent.getExtras().getInt(PASSED_DESC_COLOR);
@@ -85,7 +94,6 @@ public abstract class BaseTutorialActivity extends Activity implements
 			co.titleTextColor = intent.getExtras().getInt(PASSED_TITLE_COLOR);
 		
 		co.circleRadius = intent.getExtras().getInt(PASSED_RADIUS)/2;
-		
 		
 		if (mShowcaseView != null) {
 			
@@ -99,7 +107,9 @@ public abstract class BaseTutorialActivity extends Activity implements
 			
 			mShowcaseView.setText(title, desc);
 		}
+		
 		mShowcaseView.setConfigOptions(co);
+		
 	}
 	
 	public abstract void skipTutorial(View v);

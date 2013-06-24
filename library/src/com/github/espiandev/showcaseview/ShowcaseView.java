@@ -646,12 +646,13 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         backColor=options.backColor;
         titleTextColor = options.titleTextColor;
         detailTextColor = options.detailTextColor;
-        if(options.buttonText!=null)
+        if(options.buttonText!=null){
         	buttonText = options.buttonText;
+        	mEndButton.setText(buttonText);
+        }
         showcaseRadius = options.circleRadius;
-        //this.invalidate();
     }
-
+    
     private ConfigOptions getConfigOptions() {
         // Make sure that this method never returns null
         if (mOptions == null) return mOptions = new ConfigOptions();
