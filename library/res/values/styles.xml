@@ -45,5 +45,14 @@
         <item name="sv_backgroundColor">#3333B5E5</item>
         <item name="sv_buttonText">@string/ok</item>
     </style>
+    
+    <style name="FadeAnimationTut" parent="@android:style/Animation.Activity">
+    	<item name="android:activityOpenEnterAnimation">@anim/tut_fade_in</item>
+    	<item name="android:activityCloseEnterAnimation">@anim/tut_fade_out</item>
+	</style>
+	
+    <style name="TutorialTheme" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:windowAnimationStyle">@style/FadeAnimationTut</item>
+    </style>
 
 </resources>
