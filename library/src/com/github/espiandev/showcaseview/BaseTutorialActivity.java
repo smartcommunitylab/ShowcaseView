@@ -113,6 +113,7 @@ public abstract class BaseTutorialActivity extends Activity implements
 	}
 	
 	public abstract void skipTutorial(View v);
+	
 
 	@Override
 	public void onShowcaseViewHide(ShowcaseView showcaseView) {
@@ -126,5 +127,7 @@ public abstract class BaseTutorialActivity extends Activity implements
 	public void onShowcaseViewShow(ShowcaseView showcaseView) {
 		
 	}
+	
+	
 
 }
