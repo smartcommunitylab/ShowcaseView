@@ -450,7 +450,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
 
         float x=24*metricScale; //place it on the left
         float y=24* metricScale;
-        //manage the case thet the showcase use all the screen height
+        //manage the case where the showcase use all the screen height
         if(voidedArea.bottom>=canvasH){
         	y= canvasH/2 - 8*metricScale; // in at the center of the screen
         	if(voidedArea.right<=(canvasW/2 + 48 * metricScale))// if the showcase is on the left
@@ -459,7 +459,10 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         else if(spaceTop>spaceBottom)
         	y=128*metricScale;
         else
-        	y=24 * metricScale + voidedArea.bottom;
+        	if(canvasH/2<voidedArea.bottom)
+        		y= canvasH/2 + 16*metricScale; // in at the center of the screen
+        	else
+        		y=24 * metricScale + voidedArea.bottom;
         //return new float[]{24 * metricScale, spaceTop > spaceBottom ? 128 * metricScale : 24 * metricScale + voidedArea.bottom, canvasW - 48 * metricScale};
         return new float[]{x, y,canvasW - 48 * metricScale};
 
