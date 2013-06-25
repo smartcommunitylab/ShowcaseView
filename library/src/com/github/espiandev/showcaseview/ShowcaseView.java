@@ -413,14 +413,16 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
             if (!TextUtils.isEmpty(mTitleText)) {
                 //TODO: use a dynamic detail layout
             	mPaintTitle.setColor(titleTextColor);
-                canvas.drawText(mTitleText, mBestTextPosition[0], mBestTextPosition[1], mPaintTitle);
+            	
+            	canvas.drawText(mTitleText.replace("\n", " "), 
+            			mBestTextPosition[0], mBestTextPosition[1], mPaintTitle);
             }
 
             if (!TextUtils.isEmpty(mSubText)) {
                 canvas.save();
                 mPaintDetail.setColor(detailTextColor);
                 if (recalculateText)
-                    mDynamicDetailLayout = new DynamicLayout(mSubText, mPaintDetail,
+                    mDynamicDetailLayout = new DynamicLayout(mSubText.replace("\n", " "), mPaintDetail,
                             ((Number) mBestTextPosition[2]).intValue(), Layout.Alignment.ALIGN_NORMAL,
                             1.2f, 1.0f, true);
                 canvas.translate(mBestTextPosition[0], mBestTextPosition[1] + 12 * metricScale);
