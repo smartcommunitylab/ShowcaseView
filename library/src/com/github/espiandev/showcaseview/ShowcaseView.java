@@ -531,13 +531,13 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
     }
 
     public void hide() {
-        if (mEventListener != null) {
-            mEventListener.onShowcaseViewHide(this);
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             fadeOutShowcase();
         } else {
             setVisibility(View.GONE);
+            if (mEventListener != null) {
+                mEventListener.onShowcaseViewHide(this);
+            }
         }
     }
 
@@ -546,18 +546,21 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
             @Override
             public void onAnimationEnd() {
                 setVisibility(View.GONE);
+                if (mEventListener != null) {
+                    mEventListener.onShowcaseViewHide(ShowcaseView.this);
+                }
             }
         }).start();
     }
 
     public void show() {
-        if (mEventListener != null) {
-            mEventListener.onShowcaseViewShow(this);
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             fadeInShowcase();
         } else {
             setVisibility(View.VISIBLE);
+            if (mEventListener != null) {
+                mEventListener.onShowcaseViewShow(this);
+            }
         }
     }
 
@@ -566,6 +569,9 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
             @Override
             public void onAnimationStart() {
                 setVisibility(View.VISIBLE);
+                if (mEventListener != null) {
+                    mEventListener.onShowcaseViewShow(ShowcaseView.this);
+                }
             }
         }).start();
     }
