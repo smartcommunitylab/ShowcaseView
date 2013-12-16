@@ -38,7 +38,7 @@ public class ListViewTutorialHelper extends TutorialHelper {
 	private static final String TUT_PREFS = "tut_prefs";
 	private static final String TOUR_PREFS = "wantTour";
 
-	private TutorialItem lastShown = null;
+	private int lastShown = -1;
 	
 	/**
 	 * @param mActivity
@@ -58,10 +58,10 @@ public class ListViewTutorialHelper extends TutorialHelper {
 	 * 
 	 */
 	private void startShow() {
-		TutorialItem t = getFirstValidTutorial();
-		if (t != null) {
-			lastShown = t;
-			displayShowcaseView(t, mProvider.getItemAt(mProvider.size()-1)==t);
+		int idx = getLastTutorialShown() + 1;
+		if (idx >= 0 && idx < mProvider.size()) {
+			lastShown = idx;
+			displayShowcaseView(mProvider.getItemAt(lastShown), mProvider.size()-1==lastShown);
 		} else
 			setWantTour(mActivity, false);
 		}
@@ -70,9 +70,7 @@ public class ListViewTutorialHelper extends TutorialHelper {
 	}
 	
 	private void reset() {
-		for (int i = 0; i < mProvider.size(); i++) {
-			setTutorialVisibility(mProvider.getItemAt(i), false);
-		}
+		setLastShown(-1);
 	}
 
 	private void displayShowcaseView(TutorialItem item, boolean isLast) {
@@ -89,11 +87,6 @@ public class ListViewTutorialHelper extends TutorialHelper {
 				TutorialActivity.class);
 	}
 
-	private TutorialItem getFirstValidTutorial() {
-		TutorialItem t = getLastTutorialNotShown();
-		return t;
-	}
-
 	private static SharedPreferences getTutorialPreferences(Context ctx) {
 		SharedPreferences out = ctx.getSharedPreferences(TUT_PREFS, Context.MODE_PRIVATE);
 		return out;
@@ -105,32 +98,24 @@ public class ListViewTutorialHelper extends TutorialHelper {
 		edit.commit();
 	}
 
-	private boolean isTutorialShown(TutorialItem t) {
-		return getTutorialPreferences(mActivity).getBoolean(t.id, false);
+	private int getLastTutorialShown() {
+		return getTutorialPreferences(mActivity).getInt("idx", -1);
 	}
 
-	private void setTutorialVisibility(TutorialItem t, boolean visibility) {
+	private void setLastShown(int idx) {
 		Editor edit = getTutorialPreferences(mActivity).edit();
-		edit.putBoolean(t.id, visibility);
+		edit.putInt("idx", idx);
 		edit.commit();
 	}
 
-
-	private TutorialItem getLastTutorialNotShown() {
-		for (int i = 0; i < mProvider.size(); i++) {
-			TutorialItem item = mProvider.getItemAt(i);
-			if (!isTutorialShown(item)) return item;
-		}
-		return null;
-	}
 
 	public void onTutorialActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == TUTORIAL_REQUEST_CODE) {
 			if (resultCode == Activity.RESULT_OK) {
 				String resData = data.getExtras().getString(BaseTutorialActivity.RESULT_DATA);
 				if (resData.equals(BaseTutorialActivity.OK)) {
-					setTutorialVisibility(lastShown, true);
-					if (lastShown == mProvider.getItemAt(mProvider.size()-1)) {
+					setLastShown(lastShown);
+					if (lastShown == mProvider.size()-1) {
 						mProvider.onTutorialFinished();
 					} else  if (wantTour()) {
 						startShow();
