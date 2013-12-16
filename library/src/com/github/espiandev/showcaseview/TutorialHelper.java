@@ -33,11 +33,11 @@ import android.graphics.Color;
  */
 public class TutorialHelper {
 
-	private final static int TUTORIAL_REQUEST_CODE = 10000;
+	protected final static int TUTORIAL_REQUEST_CODE = 10000;
 
-	private Activity mActivity = null;
+	protected Activity mActivity = null;
 	
-	private TutorialProvider mProvider;
+	protected TutorialProvider mProvider;
 	
 	/**
 	 * @param mActivity
@@ -51,7 +51,10 @@ public class TutorialHelper {
 	}
 
 	public void showTutorials() {
-		TutorialItem[] items = mProvider.getItems();
+		TutorialItem[] items = new TutorialItem[mProvider.size()];
+		for (int i = 0; i < items.length; i++) {
+			items[i] = mProvider.getItemAt(i);
+		}
 		if (items != null && items.length > 0) {
 			displayShowcaseView(items);
 		}
@@ -116,7 +119,8 @@ public class TutorialHelper {
 		void onTutorialCancelled();
 		void onTutorialFinished();
 		
-		TutorialItem[] getItems();
+		TutorialItem getItemAt(int pos);
+		int size();
 	}
 
 }
