@@ -22,9 +22,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
+import android.view.View;
+import android.widget.ListView;
 
 /**
- * Tutorial helper class. To manage tutorial it is necessary to
+ * Tutorial helper class that uses a list view as the list of reference
+ * points for the tutorial steps.  
+ * To manage tutorial it is necessary to
  * provide the parent activity where the tutorial is shown 
  * and the {@link TutorialProvider} instance to provide
  * the information about the tutorial items and views, as 
@@ -55,8 +59,42 @@ public class ListViewTutorialHelper extends TutorialHelper {
 	}
 
 	/**
+	 * Fill in the parameters for the tutorial items using 
+	 * the element at 'index' in the view to calculate the position and width.
+	 * If needed, the required element will be scrolled to.
 	 * 
+	 * @param item {@link TutorialItem} instance to populate
+	 * @param index position of the element in the list 
+	 * @param listView {@link ListView} holding the steps of the tutorial
+	 * @param itemId layout ID of the view to search for
 	 */
+	public static void fillTutorialItemParams(TutorialItem item, int index, ListView listView, int itemId) {
+		if (listView != null) {
+			int firstVisible = listView.getFirstVisiblePosition();
+			int lastVisible = listView.getLastVisiblePosition();
+			int shift = 0;
+			View v = null;
+			if (index <= firstVisible) {
+				v = listView.getChildAt(index);
+				shift = -v.getTop();
+				listView.setSelection(index);
+			} else if (index >= lastVisible && listView.getChildAt(index) != null) {
+				// TODO
+			} else {
+				v = listView.getChildAt(index);
+			}
+			if (v != null) {
+				View logo = v.findViewById(itemId);
+				if (logo != null) {
+					item.width = logo.getWidth();
+					item.position = new int[2];
+					logo.getLocationOnScreen(item.position);
+					item.position[1] += shift;
+				}
+			}
+		}
+	}
+	
 	private void startShow() {
 		int idx = getLastTutorialShown() + 1;
 		if (idx >= 0 && idx < mProvider.size()) {
@@ -92,7 +130,7 @@ public class ListViewTutorialHelper extends TutorialHelper {
 		return out;
 	}
 
-	public static void setWantTour(Context ctx, boolean want) {
+	static void setWantTour(Context ctx, boolean want) {
 		Editor edit = getTutorialPreferences(ctx).edit();
 		edit.putBoolean(TOUR_PREFS, want);
 		edit.commit();
@@ -117,8 +155,10 @@ public class ListViewTutorialHelper extends TutorialHelper {
 					setLastShown(lastShown);
 					if (lastShown == mProvider.size()-1) {
 						mProvider.onTutorialFinished();
-					} else  if (wantTour()) {
+					} else if (wantTour()) {
 						startShow();
+					} else {
+						mProvider.onTutorialCancelled();
 					}
 				} else {
 					mProvider.onTutorialCancelled();
