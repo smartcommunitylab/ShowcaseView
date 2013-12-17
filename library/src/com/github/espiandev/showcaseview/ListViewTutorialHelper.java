@@ -70,19 +70,38 @@ public class ListViewTutorialHelper extends TutorialHelper {
 	 */
 	public static void fillTutorialItemParams(TutorialItem item, int index, ListView listView, int itemId) {
 		if (listView != null) {
+		
 			int firstVisible = listView.getFirstVisiblePosition();
 			int lastVisible = listView.getLastVisiblePosition();
+			int page = lastVisible - firstVisible;
 			int shift = 0;
 			View v = null;
 			if (index <= firstVisible) {
 				v = listView.getChildAt(index);
 				shift = -v.getTop();
+				if (v != null && v.findViewById(itemId) != null)
+
 				listView.setSelection(index);
-			} else if (index >= lastVisible && listView.getChildAt(index) != null) {
-				// TODO
-			} else {
-				v = listView.getChildAt(index);
+				
+				
+			}else if (index >= lastVisible && listView.getChildAt(index - firstVisible) != null) {
+				v = listView.getChildAt(index - firstVisible);
+				if (listView.getAdapter().getCount() - lastVisible <= page) {
+					// last items < one page
+					v = listView.getChildAt(lastVisible-firstVisible-2);		
+					if (v != null && v.findViewById(itemId) != null)
+						listView.setSelection(firstVisible+2);
+				} else {
+					shift = -v.getTop();
+					if (v != null && v.findViewById(itemId) != null)
+						listView.setSelection(index);
+					
+				}
+
+			}else {
+				v = listView.getChildAt(index - firstVisible);
 			}
+			
 			if (v != null) {
 				View logo = v.findViewById(itemId);
 				if (logo != null) {
