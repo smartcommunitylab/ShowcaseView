@@ -118,8 +118,8 @@ public class ListViewTutorialHelper extends TutorialHelper {
 				item.width,
 				Color.WHITE, 
 				null,
-				mActivity.getString(item.titleId),
-				mActivity.getString(item.msgId),
+				item.title == null ? mActivity.getString(item.titleId) : item.title,
+				item.msg == null ? mActivity.getString(item.msgId) : item.msg,
 				isLast,
 				TUTORIAL_REQUEST_CODE,
 				TutorialActivity.class);

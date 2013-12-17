@@ -27,6 +27,8 @@ public class TutorialItem implements Parcelable {
 	public int width;
 	public int titleId;
 	public int msgId;
+	public String title;
+	public String msg;
 
 	public static final Parcelable.Creator<TutorialItem> CREATOR  = new Parcelable.Creator<TutorialItem>() {
 		public TutorialItem createFromParcel(Parcel in) {
@@ -45,14 +47,28 @@ public class TutorialItem implements Parcelable {
 		this.msgId = msgId;
 		this.position = position;
 		this.width = width;
+		this.msg = null;
+		this.title = null;
 	}
 	
+	public TutorialItem(String id, int[] position, int width, String title, String msg) {
+		super();
+		this.id = id;
+		this.position = position;
+		this.width = width;
+		this.title = title;
+		this.msg = msg;
+	}
+
+
 	public TutorialItem(Parcel in) {
 		this.id = in.readString();
 		this.position = new int[]{in.readInt(),in.readInt()};
 		this.width = in.readInt();
 		this.titleId = in.readInt();
 		this.msgId = in.readInt();
+		this.msg = in.readString();
+		this.title = in.readString();
 	}
 
 	@Override
@@ -68,5 +84,7 @@ public class TutorialItem implements Parcelable {
 		dest.writeInt(width);
 		dest.writeInt(titleId);
 		dest.writeInt(msgId);
+		dest.writeString(title);
+		dest.writeString(msg);
 	}
 }
