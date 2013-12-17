@@ -67,8 +67,8 @@ public class TutorialItem implements Parcelable {
 		this.width = in.readInt();
 		this.titleId = in.readInt();
 		this.msgId = in.readInt();
-		this.msg = in.readString();
 		this.title = in.readString();
+		this.msg = in.readString();
 	}
 
 	@Override
