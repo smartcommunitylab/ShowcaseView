@@ -21,6 +21,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Tutorial helper class. To manage tutorial it is necessary to
@@ -31,7 +33,7 @@ import android.graphics.Color;
  * @author raman
  *
  */
-public class TutorialHelper {
+public class TutorialHelper implements Parcelable{
 
 	protected final static int TUTORIAL_REQUEST_CODE = 10000;
 
@@ -121,6 +123,18 @@ public class TutorialHelper {
 		
 		TutorialItem getItemAt(int pos);
 		int size();
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
