@@ -113,8 +113,8 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 			if(position!=null)
 				mShowcaseView.setShowcasePosition(position[0]+mConfigOptions.circleRadius, position[1]);
 			
-			String title = getString(item.titleId);
-			String desc = getString(item.msgId);
+			String title = item.title == null ? getString(item.titleId) : item.title;
+			String desc = item.msg == null ? getString(item.msgId) : item.msg;
 			
 			mShowcaseView.setText(title, desc);
 		}
