@@ -41,15 +41,17 @@ public class TutorialHelper implements Parcelable{
 	
 	protected TutorialProvider mProvider;
 	
-	/**
-	 * @param mActivity
-	 * @param mItemList
-	 */
+	protected Integer mColor=null;
+	
 	public TutorialHelper(Activity mActivity, TutorialProvider provider) {
 		super();
 		this.mActivity = mActivity;
 		this.mProvider = provider;
 		assert provider != null;
+	}
+
+	public void setColor(int color){
+		this.mColor=color;
 	}
 
 	public void showTutorials() {
@@ -69,6 +71,7 @@ public class TutorialHelper implements Parcelable{
 					items, 
 					Color.WHITE, 
 					null,
+					mColor,
 					TUTORIAL_REQUEST_CODE);
 		}
 	}

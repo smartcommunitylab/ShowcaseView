@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.github.espiandev.showcaseview;
 
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -29,9 +28,11 @@ import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
 import com.github.espiandev.showcaseview.ShowcaseView.OnShowcaseEventListener;
 
 /**
- * Starts a chain of tutorial items, showing them one by one until cancelled or finished.
+ * Starts a chain of tutorial items, showing them one by one until cancelled or
+ * finished.
+ * 
  * @author raman
- *
+ * 
  */
 public class TourActivity extends Activity implements OnShowcaseEventListener {
 
@@ -39,7 +40,8 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 
 	private final static String PASSED_TITLE_COLOR = "passedTitleColor";
 	private final static String PASSED_DESC_COLOR = "passedDescColor";
-	
+	private final static String PASSED_COLOR = "passedColor";
+
 	public static final String RESULT_DATA = "tutResult";
 	public static final String REDO = "redoTut";
 	public static final String OK = "okTut";
@@ -49,24 +51,41 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 	private ConfigOptions mConfigOptions = null;
 	private Parcelable[] mItemArray = null;
 	private int mPosition = 0;
- 
-	public static void newIstance(Activity ctx, TutorialItem[] items, Integer titleColor,Integer descColor, int requestCode) {
-		Intent caller = new Intent(ctx,TourActivity.class);
-		caller.putExtra(PASSED_ITEMS, items);
-		if(titleColor!=null)
-			caller.putExtra(PASSED_TITLE_COLOR, titleColor);
-		if(descColor!=null)
-			caller.putExtra(PASSED_DESC_COLOR, descColor);
-		ctx.startActivityForResult(caller, requestCode)	;
+
+	public static void newIstance(Activity ctx, TutorialItem[] items,
+			Integer titleColor, Integer descColor, Integer color,
+			int requestCode) {
+		Intent caller = getNewIstance(ctx, items, titleColor, descColor,
+				requestCode);
+		if (color != null)
+			caller.putExtra(PASSED_COLOR, color);
+		ctx.startActivityForResult(caller, requestCode);
 	}
-	
+
+	public static void newIstance(Activity ctx, TutorialItem[] items,
+			Integer titleColor, Integer descColor,
+			int requestCode) {
+		newIstance(ctx, items, titleColor, descColor, null, requestCode);
+	}
+
+	private static Intent getNewIstance(Activity ctx, TutorialItem[] items,
+			Integer titleColor, Integer descColor, int requestCode) {
+		Intent caller = new Intent(ctx, TourActivity.class);
+		caller.putExtra(PASSED_ITEMS, items);
+		if (titleColor != null)
+			caller.putExtra(PASSED_TITLE_COLOR, titleColor);
+		if (descColor != null)
+			caller.putExtra(PASSED_DESC_COLOR, descColor);
+		return caller;
+	}
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		setResult(RESULT_CANCELED);
 		this.finish();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -83,46 +102,63 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 		skip = (Button) findViewById(R.id.skip_tutorial_btn);
 
 		mConfigOptions = new ConfigOptions();
-		if(getIntent().getExtras().getInt(PASSED_DESC_COLOR,Integer.MIN_VALUE)!=Integer.MIN_VALUE)
-			mConfigOptions.detailTextColor = getIntent().getExtras().getInt(PASSED_DESC_COLOR);
-		if(getIntent().getExtras().getInt(PASSED_TITLE_COLOR,Integer.MIN_VALUE)!=Integer.MIN_VALUE)
-			mConfigOptions.titleTextColor = getIntent().getExtras().getInt(PASSED_TITLE_COLOR);
+		if (getIntent().getExtras()
+				.getInt(PASSED_DESC_COLOR, Integer.MIN_VALUE) != Integer.MIN_VALUE)
+			mConfigOptions.detailTextColor = getIntent().getExtras().getInt(
+					PASSED_DESC_COLOR);
+		if (getIntent().getExtras().getInt(PASSED_TITLE_COLOR,
+				Integer.MIN_VALUE) != Integer.MIN_VALUE)
+			mConfigOptions.titleTextColor = getIntent().getExtras().getInt(
+					PASSED_TITLE_COLOR);
 
-		
+		if (getIntent().getExtras().getInt(PASSED_COLOR, Integer.MIN_VALUE) != Integer.MIN_VALUE) {
+			int color = getIntent().getExtras().getInt(PASSED_COLOR);
+			setSkipButtonColor(color);
+			mConfigOptions.color = color;
+		}
+
+		mShowcaseView.setConfigOptions(mConfigOptions);
+
 		mShowcaseView.setOnShowcaseEventListener(this);
-		mItemArray = (Parcelable[])getIntent().getParcelableArrayExtra(PASSED_ITEMS);
+		mItemArray = (Parcelable[]) getIntent().getParcelableArrayExtra(
+				PASSED_ITEMS);
 		if (mItemArray != null && mItemArray.length > 0) {
-			setParams((TutorialItem)mItemArray[0], mItemArray.length == 1);
+			setParams((TutorialItem) mItemArray[0], mItemArray.length == 1);
 			mShowcaseView.show();
 		}
 	}
 
 	private void setParams(TutorialItem item, boolean isLast) {
-		
-		if(isLast){
+
+		if (isLast) {
 			mConfigOptions.buttonText = getString(R.string.ok);
 			skip.setVisibility(View.GONE);
-		}
-		else
+		} else
 			mConfigOptions.buttonText = getString(R.string.next_tut);
-		
+
 		if (mShowcaseView != null) {
-			mConfigOptions.circleRadius = item.width/2;
+			mConfigOptions.circleRadius = item.width / 2;
 
 			int[] position = item.position;
-			if(position!=null)
-				mShowcaseView.setShowcasePosition(position[0]+mConfigOptions.circleRadius, position[1]);
-			
-			String title = item.title == null ? getString(item.titleId) : item.title;
+			if (position != null)
+				mShowcaseView.setShowcasePosition(position[0]
+						+ mConfigOptions.circleRadius, position[1]);
+
+			String title = item.title == null ? getString(item.titleId)
+					: item.title;
 			String desc = item.msg == null ? getString(item.msgId) : item.msg;
-			
+
 			mShowcaseView.setText(title, desc);
 		}
-		
+
 		mShowcaseView.setConfigOptions(mConfigOptions);
-		
+
 	}
-	
+
+	protected void setSkipButtonColor(int backColor) {
+		skip.setBackgroundColor(backColor);
+	}
+
 	public void skipTutorial(View v) {
 		setResult(RESULT_CANCELED);
 		this.finish();
@@ -135,26 +171,25 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 		super.onBackPressed();
 		skipTutorial(null);
 	}
-	
+
 	@Override
 	public void onShowcaseViewHide(ShowcaseView showcaseView) {
 		if (mPosition == mItemArray.length - 1) {
 			Intent returnIntent = new Intent();
 			returnIntent.putExtra(RESULT_DATA, OK);
-			this.setResult(RESULT_OK,returnIntent);
+			this.setResult(RESULT_OK, returnIntent);
 			this.finish();
 		} else {
 			mPosition++;
-			setParams((TutorialItem)mItemArray[mPosition], mPosition == mItemArray.length - 1);
+			setParams((TutorialItem) mItemArray[mPosition],
+					mPosition == mItemArray.length - 1);
 			mShowcaseView.show();
 		}
 	}
 
 	@Override
 	public void onShowcaseViewShow(ShowcaseView showcaseView) {
-		
+
 	}
-	
-	
 
 }

@@ -103,6 +103,7 @@ public class ActionBarTutorialHelper extends TutorialHelper {
 				item.width,
 				Color.WHITE, 
 				null,
+				mColor,
 				mActivity.getString(item.titleId),
 				mActivity.getString(item.msgId),
 				isLast,

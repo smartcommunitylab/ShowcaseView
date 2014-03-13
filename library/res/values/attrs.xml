@@ -1,6 +1,7 @@
 <resources>
 
     <declare-styleable name="ShowcaseView">
+        <attr name="sv_color" format="color|reference" />
         <attr name="sv_backgroundColor" format="color|reference" />
         <attr name="sv_detailTextColor" format="color|reference" />
         <attr name="sv_titleTextColor" format="color|reference" />
