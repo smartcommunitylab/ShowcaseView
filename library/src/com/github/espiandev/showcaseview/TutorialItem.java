@@ -18,6 +18,7 @@ package com.github.espiandev.showcaseview;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 
 public class TutorialItem implements Parcelable {

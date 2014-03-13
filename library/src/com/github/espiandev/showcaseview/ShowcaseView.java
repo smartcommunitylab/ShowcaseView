@@ -162,9 +162,12 @@ public class ShowcaseView extends RelativeLayout implements
 			mEndButton.setLayoutParams(lps);
 			mEndButton.setText(buttonText != null ? buttonText : getResources()
 					.getString(R.string.ok));
+			
+			//this needs improvement.
 			Drawable d = getResources().getDrawable(R.drawable.cling_button_bg);
 			d.setColorFilter(mShowCaseColor,Mode.SRC_OVER);
 			mEndButton.setBackground(d);
+			
 			if (!hasCustomClickListener)
 				mEndButton.setOnClickListener(this);
 			addView(mEndButton);
