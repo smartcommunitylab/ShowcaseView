@@ -978,6 +978,7 @@ public class ShowcaseView extends RelativeLayout implements
 		public int insert = INSERT_TO_DECOR;
 		public boolean hideOnClickOutside = false;
 		public int color = Color.parseColor("#33b5e5");
+		public int exitButtonColor = Color.parseColor("#33b5e5");
 		public int backColor = Color.argb(128, 80, 80, 80);
 		public int titleTextColor = Color.parseColor("#49C0EC");
 		public int detailTextColor = Color.WHITE;

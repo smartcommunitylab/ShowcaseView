@@ -43,6 +43,8 @@ public class TutorialHelper implements Parcelable{
 	
 	protected Integer mColor=null;
 	
+	protected Integer mExitButtonColor = null;
+	
 	public TutorialHelper(Activity mActivity, TutorialProvider provider) {
 		super();
 		this.mActivity = mActivity;
@@ -50,8 +52,9 @@ public class TutorialHelper implements Parcelable{
 		assert provider != null;
 	}
 
-	public void setColor(int color){
+	public void setColor(int color, int exitButtonColor){
 		this.mColor=color;
+		this.mExitButtonColor=exitButtonColor;
 	}
 
 	public void showTutorials() {
@@ -72,6 +75,7 @@ public class TutorialHelper implements Parcelable{
 					Color.WHITE, 
 					null,
 					mColor,
+					mExitButtonColor,
 					TUTORIAL_REQUEST_CODE);
 		}
 	}

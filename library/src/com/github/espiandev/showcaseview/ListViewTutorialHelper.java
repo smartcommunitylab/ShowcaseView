@@ -190,6 +190,7 @@ public class ListViewTutorialHelper extends TutorialHelper {
 				Color.WHITE, 
 				null,
 				mColor,
+				mExitButtonColor,
 				item.title == null ? mActivity.getString(item.titleId) : item.title,
 				item.msg == null ? mActivity.getString(item.msgId) : item.msg, isLast, TUTORIAL_REQUEST_CODE,
 				TutorialActivity.class);

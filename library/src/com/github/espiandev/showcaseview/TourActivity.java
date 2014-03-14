@@ -41,6 +41,7 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 	private final static String PASSED_TITLE_COLOR = "passedTitleColor";
 	private final static String PASSED_DESC_COLOR = "passedDescColor";
 	private final static String PASSED_COLOR = "passedColor";
+	private final static String PASSED_EXIT_BUTTON_COLOR = "passedExitButtonColor";
 
 	public static final String RESULT_DATA = "tutResult";
 	public static final String REDO = "redoTut";
@@ -53,19 +54,21 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 	private int mPosition = 0;
 
 	public static void newIstance(Activity ctx, TutorialItem[] items,
-			Integer titleColor, Integer descColor, Integer color,
+			Integer titleColor, Integer descColor, Integer color, Integer exitButtonColor,
 			int requestCode) {
 		Intent caller = getNewIstance(ctx, items, titleColor, descColor,
 				requestCode);
 		if (color != null)
 			caller.putExtra(PASSED_COLOR, color);
+		if (exitButtonColor != null)
+			caller.putExtra(PASSED_EXIT_BUTTON_COLOR, exitButtonColor);
 		ctx.startActivityForResult(caller, requestCode);
 	}
 
 	public static void newIstance(Activity ctx, TutorialItem[] items,
 			Integer titleColor, Integer descColor,
 			int requestCode) {
-		newIstance(ctx, items, titleColor, descColor, null, requestCode);
+		newIstance(ctx, items, titleColor, descColor, null,null, requestCode);
 	}
 
 	private static Intent getNewIstance(Activity ctx, TutorialItem[] items,
@@ -113,10 +116,13 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 
 		if (getIntent().getExtras().getInt(PASSED_COLOR, Integer.MIN_VALUE) != Integer.MIN_VALUE) {
 			int color = getIntent().getExtras().getInt(PASSED_COLOR);
-			setSkipButtonColor(color);
+//			setSkipButtonColor(color);
 			mConfigOptions.color = color;
 		}
-
+		if (getIntent().getExtras().getInt(PASSED_EXIT_BUTTON_COLOR, Integer.MIN_VALUE) != Integer.MIN_VALUE) {
+			int color = getIntent().getExtras().getInt(PASSED_EXIT_BUTTON_COLOR);
+			setSkipButtonColor(color);
+		}
 		mShowcaseView.setConfigOptions(mConfigOptions);
 
 		mShowcaseView.setOnShowcaseEventListener(this);

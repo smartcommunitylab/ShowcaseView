@@ -19,6 +19,7 @@ public abstract class BaseTutorialActivity extends Activity implements
 	private final static String PASSED_TITLE = "passedTitle";
 	private final static String PASSED_DESC = "passedDesc";
 	private final static String PASSED_COLOR = "passedColor";
+	private final static String EXIT_BUTTON_COLOR = "exitButtonColor";
 	private final static String PASSED_TITLE_COLOR = "passedTitleColor";
 	private final static String PASSED_DESC_COLOR = "passedDescColor";
 	private final static String PASSED_IS_LAST = "passedLastTut";
@@ -30,7 +31,7 @@ public abstract class BaseTutorialActivity extends Activity implements
 	protected ShowcaseView mShowcaseView;
 	private Button skip;
  
-	public static void newIstance(Activity ctx, int[] position,int radius,Integer titleColor,Integer descColor,Integer color,
+	public static void newIstance(Activity ctx, int[] position,int radius,Integer titleColor,Integer descColor,Integer color,Integer exitButtonColor,
 			String title, String description,boolean isLast, int requestCode, Class<? extends BaseTutorialActivity> act) {
 		Intent caller = new Intent(ctx,act);
 		caller.putExtra(PASSED_POSITION, position);
@@ -44,11 +45,13 @@ public abstract class BaseTutorialActivity extends Activity implements
 			caller.putExtra(PASSED_DESC_COLOR, descColor);
 		if(color!=null)
 			caller.putExtra(PASSED_COLOR, color);
+		if(exitButtonColor!=null)
+			caller.putExtra(EXIT_BUTTON_COLOR, color);
 		ctx.startActivityForResult(caller, requestCode)	;
 	}
 	public static void newIstance(Activity ctx, int[] position,int radius,Integer titleColor,Integer descColor,
 			String title, String description,boolean isLast, int requestCode, Class<? extends BaseTutorialActivity> act) {
-		newIstance(ctx, position, radius, titleColor, descColor, null, title, description, isLast, requestCode, act);
+		newIstance(ctx, position, radius, titleColor, descColor, null, null, title, description, isLast, requestCode, act);
 	}
 	
 	@Override
@@ -99,7 +102,8 @@ public abstract class BaseTutorialActivity extends Activity implements
 		
 		if (getIntent().getExtras().getInt(PASSED_COLOR, Integer.MIN_VALUE) != Integer.MIN_VALUE)
 			co.color = getIntent().getExtras().getInt(PASSED_COLOR);
-		
+		if (getIntent().getExtras().getInt(EXIT_BUTTON_COLOR, Integer.MIN_VALUE) != Integer.MIN_VALUE)
+			co.color = getIntent().getExtras().getInt(EXIT_BUTTON_COLOR);
 		co.circleRadius = intent.getExtras().getInt(PASSED_RADIUS)/2;
 		
 		if (mShowcaseView != null) {
