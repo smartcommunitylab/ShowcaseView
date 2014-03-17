@@ -3,6 +3,7 @@ package com.github.espiandev.showcaseview;
 import java.lang.reflect.Field;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -178,7 +179,7 @@ public class ShowcaseView extends RelativeLayout implements
 			//this needs improvement.
 			Drawable d = getResources().getDrawable(R.drawable.cling_button_bg);
 			d.setColorFilter(mShowCaseColor,Mode.SRC_OVER);
-			mEndButton.setBackground(d);
+			setBg(mEndButton, d);
 			
 			if (!hasCustomClickListener)
 				mEndButton.setOnClickListener(this);
@@ -998,4 +999,14 @@ public class ShowcaseView extends RelativeLayout implements
 		public int circleRadius = -1;
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	@SuppressWarnings("deprecation")
+	private void setBg(View layout, Drawable drawable) {
+		if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+			layout.setBackgroundDrawable(drawable);
+		} else {
+			layout.setBackground(drawable);
+		}
+	}
+	
 }
