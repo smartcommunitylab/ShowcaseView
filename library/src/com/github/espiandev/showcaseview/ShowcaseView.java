@@ -1,12 +1,21 @@
 package com.github.espiandev.showcaseview;
 
+import java.lang.reflect.Field;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.DynamicLayout;
@@ -14,17 +23,20 @@ import android.text.Layout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.*;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.github.espiandev.showcaseview.anim.AnimationUtils;
-
-import java.lang.reflect.Field;
-
-import static com.github.espiandev.showcaseview.anim.AnimationUtils.AnimationEndListener;
-import static com.github.espiandev.showcaseview.anim.AnimationUtils.AnimationStartListener;
+import com.github.espiandev.showcaseview.anim.AnimationUtils.AnimationEndListener;
+import com.github.espiandev.showcaseview.anim.AnimationUtils.AnimationStartListener;
 
 /**
  * A view which allows you to showcase areas of your app with an explanation.
@@ -157,8 +169,8 @@ public class ShowcaseView extends RelativeLayout implements
 			lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 			int margin = ((Number) (metricScale * 12)).intValue();
 			lps.setMargins(margin, margin, margin, margin);
-			lps.height = LayoutParams.WRAP_CONTENT;
-			lps.width = LayoutParams.WRAP_CONTENT;
+			mEndButton.setHeight(getResources().getDimensionPixelSize(R.dimen.button_heith));
+			mEndButton.setWidth(getResources().getDimensionPixelSize(R.dimen.button_width));
 			mEndButton.setLayoutParams(lps);
 			mEndButton.setText(buttonText != null ? buttonText : getResources()
 					.getString(R.string.ok));
