@@ -19,6 +19,7 @@ public abstract class BaseTutorialActivity extends Activity implements
 	private final static String PASSED_TITLE = "passedTitle";
 	private final static String PASSED_DESC = "passedDesc";
 	private final static String PASSED_COLOR = "passedColor";
+	private final static String PASSED_BACK_COLOR = "passedBackColor";
 	private final static String EXIT_BUTTON_COLOR = "exitButtonColor";
 	private final static String PASSED_TITLE_COLOR = "passedTitleColor";
 	private final static String PASSED_DESC_COLOR = "passedDescColor";
@@ -31,7 +32,7 @@ public abstract class BaseTutorialActivity extends Activity implements
 	protected ShowcaseView mShowcaseView;
 	private Button skip;
  
-	public static void newIstance(Activity ctx, int[] position,int radius,Integer titleColor,Integer descColor,Integer color,Integer exitButtonColor,
+	public static void newIstance(Activity ctx, int[] position,int radius,Integer titleColor,Integer descColor,Integer backColor,Integer color,Integer exitButtonColor,
 			String title, String description,boolean isLast, int requestCode, Class<? extends BaseTutorialActivity> act) {
 		Intent caller = new Intent(ctx,act);
 		caller.putExtra(PASSED_POSITION, position);
@@ -43,15 +44,17 @@ public abstract class BaseTutorialActivity extends Activity implements
 			caller.putExtra(PASSED_TITLE_COLOR, titleColor);
 		if(descColor!=null)
 			caller.putExtra(PASSED_DESC_COLOR, descColor);
+		if(backColor!=null)
+			caller.putExtra(PASSED_BACK_COLOR, backColor);
 		if(color!=null)
 			caller.putExtra(PASSED_COLOR, color);
 		if(exitButtonColor!=null)
-			caller.putExtra(EXIT_BUTTON_COLOR, color);
+			caller.putExtra(EXIT_BUTTON_COLOR, exitButtonColor);
 		ctx.startActivityForResult(caller, requestCode)	;
 	}
 	public static void newIstance(Activity ctx, int[] position,int radius,Integer titleColor,Integer descColor,
 			String title, String description,boolean isLast, int requestCode, Class<? extends BaseTutorialActivity> act) {
-		newIstance(ctx, position, radius, titleColor, descColor, null, null, title, description, isLast, requestCode, act);
+		newIstance(ctx, position, radius, titleColor, descColor, null,null, null, title, description, isLast, requestCode, act);
 	}
 	
 	@Override
@@ -100,11 +103,15 @@ public abstract class BaseTutorialActivity extends Activity implements
 		if(intent.getExtras().getInt(PASSED_TITLE_COLOR,Integer.MIN_VALUE)!=Integer.MIN_VALUE)
 			co.titleTextColor = intent.getExtras().getInt(PASSED_TITLE_COLOR);
 		
+		if (getIntent().getExtras().getInt(PASSED_BACK_COLOR, Integer.MIN_VALUE) != Integer.MIN_VALUE)
+			co.backColor = getIntent().getExtras().getInt(PASSED_BACK_COLOR);
 		if (getIntent().getExtras().getInt(PASSED_COLOR, Integer.MIN_VALUE) != Integer.MIN_VALUE)
 			co.color = getIntent().getExtras().getInt(PASSED_COLOR);
 		if (getIntent().getExtras().getInt(EXIT_BUTTON_COLOR, Integer.MIN_VALUE) != Integer.MIN_VALUE)
-			co.color = getIntent().getExtras().getInt(EXIT_BUTTON_COLOR);
+			co.exitButtonColor = getIntent().getExtras().getInt(EXIT_BUTTON_COLOR);
+		
 		co.circleRadius = intent.getExtras().getInt(PASSED_RADIUS)/2;
+		mShowcaseView.setConfigOptions(co);
 		
 		if (mShowcaseView != null) {
 			
@@ -118,8 +125,6 @@ public abstract class BaseTutorialActivity extends Activity implements
 			
 			mShowcaseView.setText(title, desc);
 		}
-		
-		mShowcaseView.setConfigOptions(co);
 		
 	}
 	

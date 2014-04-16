@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -17,6 +18,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.DynamicLayout;
@@ -90,6 +92,8 @@ public class ShowcaseView extends RelativeLayout implements
 	private float scaleMultiplier = 1f;
 
 	private int mShowCaseColor;
+	private Paint mPainterCircle;
+	private Paint mPaintBlur;
 
 	public ShowcaseView(Context context) {
 		this(context, null, R.styleable.CustomTheme_showcaseViewStyle);
@@ -138,7 +142,9 @@ public class ShowcaseView extends RelativeLayout implements
 			isRedundant = true;
 			return;
 		}
+		
 		showcase = getContext().getResources().getDrawable(R.drawable.cling);
+		// showcase = new ColorDrawable(backColor);
 		showcase.setColorFilter(mShowCaseColor, Mode.MULTIPLY);
 
 		showcaseRadius = metricScale * INNER_CIRCLE_RADIUS;
@@ -148,15 +154,30 @@ public class ShowcaseView extends RelativeLayout implements
 
 		mPaintTitle = new Paint();
 		mPaintTitle.setColor(titleTextColor);
-		mPaintTitle.setShadowLayer(2.0f, 0f, 2.0f, Color.DKGRAY);
+		// mPaintTitle.setShadowLayer(2.0f, 0f, 2.0f, Color.DKGRAY);
 		mPaintTitle.setTextSize(24 * metricScale);
 		mPaintTitle.setAntiAlias(true);
 
 		mPaintDetail = new TextPaint();
 		mPaintDetail.setColor(detailTextColor);
-		mPaintDetail.setShadowLayer(2.0f, 0f, 2.0f, Color.DKGRAY);
+		// mPaintDetail.setShadowLayer(2.0f, 0f, 2.0f, Color.DKGRAY);
 		mPaintDetail.setTextSize(16 * metricScale);
 		mPaintDetail.setAntiAlias(true);
+		
+		mPainterCircle = new Paint();
+		mPainterCircle.setColor(mShowCaseColor);
+		mPainterCircle.setStyle(Paint.Style.STROKE);
+		mPainterCircle.setStrokeWidth(3.0f);
+		mPainterCircle.setAntiAlias(true);
+		
+		mPaintBlur = new Paint();
+		mPaintBlur.set(mPainterCircle);
+		mPaintBlur.setDither(true);
+		mPaintBlur.setStrokeJoin(Paint.Join.ROUND);
+	    mPaintBlur.setStrokeCap(Paint.Cap.ROUND);
+		mPaintBlur.setStrokeWidth(10f);
+		mPaintBlur.setMaskFilter(new BlurMaskFilter(55,
+				BlurMaskFilter.Blur.OUTER));
 
 		mEraser = new Paint();
 		mEraser.setColor(0xFFFFFF);
@@ -170,17 +191,19 @@ public class ShowcaseView extends RelativeLayout implements
 			lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 			int margin = ((Number) (metricScale * 12)).intValue();
 			lps.setMargins(margin, margin, margin, margin);
-			mEndButton.setHeight(getResources().getDimensionPixelSize(R.dimen.button_heith));
-			mEndButton.setWidth(getResources().getDimensionPixelSize(R.dimen.button_width));
+			mEndButton.setHeight(getResources().getDimensionPixelSize(
+					R.dimen.button_heith));
+			mEndButton.setWidth(getResources().getDimensionPixelSize(
+					R.dimen.button_width));
 			mEndButton.setLayoutParams(lps);
 			mEndButton.setText(buttonText != null ? buttonText : getResources()
 					.getString(R.string.ok));
-			
-			//this needs improvement.
+
+			// this needs improvement.
 			Drawable d = getResources().getDrawable(R.drawable.cling_button_bg);
-			d.setColorFilter(mShowCaseColor,Mode.SRC_OVER);
+			d.setColorFilter(mShowCaseColor, Mode.SRC_OVER);
 			setBg(mEndButton, d);
-			
+
 			if (!hasCustomClickListener)
 				mEndButton.setOnClickListener(this);
 			addView(mEndButton);
@@ -444,16 +467,23 @@ public class ShowcaseView extends RelativeLayout implements
 		Matrix mm = new Matrix();
 		mm.postScale(scaleMultiplier, scaleMultiplier, showcaseX, showcaseY);
 		c.setMatrix(mm);
+		
+		
+		c.drawCircle(showcaseX, showcaseY, showcaseRadius + 1.5f, mPainterCircle);
 
-		// Erase the area for the ring
+		
+		c.drawCircle(showcaseX, showcaseY, showcaseRadius, mPaintBlur);
+
+		// make the area of the icon transparent
 		c.drawCircle(showcaseX, showcaseY, showcaseRadius, mEraser);
+
 
 		boolean recalculateText = makeVoidedRect() || mAlteredText;
 		mAlteredText = false;
 
 		showcase.setBounds(voidedArea);
 		showcase.draw(c);
-
+		
 		canvas.drawBitmap(b, 0, 0, null);
 
 		// Clean up, as we no longer require these items.
@@ -1008,5 +1038,5 @@ public class ShowcaseView extends RelativeLayout implements
 			layout.setBackground(drawable);
 		}
 	}
-	
+
 }

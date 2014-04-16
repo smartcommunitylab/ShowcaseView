@@ -42,6 +42,7 @@ public class TutorialHelper implements Parcelable{
 	protected TutorialProvider mProvider;
 	
 	protected Integer mColor=null;
+	protected Integer mBackColor=null;
 	
 	protected Integer mExitButtonColor = null;
 	
@@ -55,6 +56,10 @@ public class TutorialHelper implements Parcelable{
 	public void setColor(int color, int exitButtonColor){
 		this.mColor=color;
 		this.mExitButtonColor=exitButtonColor;
+	}
+	
+	public void setBackColor(int color){
+		this.mBackColor=color;
 	}
 
 	public void showTutorials() {
@@ -74,6 +79,7 @@ public class TutorialHelper implements Parcelable{
 					items, 
 					Color.WHITE, 
 					null,
+					mBackColor,
 					mColor,
 					mExitButtonColor,
 					TUTORIAL_REQUEST_CODE);
