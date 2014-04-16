@@ -125,6 +125,7 @@ public abstract class BaseTutorialActivity extends Activity implements
 			
 			mShowcaseView.setText(title, desc);
 		}
+		mShowcaseView.setConfigOptions(co);
 		
 	}
 	
