@@ -1022,7 +1022,7 @@ public class ShowcaseView extends RelativeLayout implements
 		public boolean hideOnClickOutside = false;
 		public int color = Color.parseColor("#33b5e5");
 		public int exitButtonColor = Color.parseColor("#33b5e5");
-		public int backColor = Color.argb(128, 80, 80, 80);
+		public int backColor = Color.argb(225, 50, 50, 50);
 		public int titleTextColor = Color.parseColor("#49C0EC");
 		public int detailTextColor = Color.WHITE;
 		public String buttonText;

@@ -110,7 +110,7 @@ public class ListViewTutorialHelper extends TutorialHelper {
 					item.width = logo.getWidth();
 					item.position = new int[2];
 					logo.getLocationOnScreen(item.position);
-					item.position[1] += shift - 12; // correction
+					item.position[1] += shift - 5; // correction
 				}
 			}
 		}
