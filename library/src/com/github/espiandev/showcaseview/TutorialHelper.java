@@ -100,7 +100,7 @@ public class TutorialHelper implements Parcelable{
 			}
 		}
 	}
-	
+
 	/**
 	 * Show a dialog to initiate the tutorial given the message and the title for
 	 * the 'start' button
@@ -108,6 +108,17 @@ public class TutorialHelper implements Parcelable{
 	 * @param start
 	 */
 	public void showTourDialog(String message, String start) {
+		showTourDialog(null, message, start);
+	}
+
+	/**
+	 * Show a dialog to initiate the tutorial given the message and the title for
+	 * the 'start' button
+	 * @param title
+	 * @param message
+	 * @param start
+	 */
+	public void showTourDialog(String title, String message, String start) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
 				.setMessage(message)
 				.setPositiveButton(start,
@@ -127,6 +138,9 @@ public class TutorialHelper implements Parcelable{
 								mProvider.onTutorialCancelled();
 							}
 						});
+		if (title != null) {
+			builder.setTitle(title);
+		}
 		builder.create().show();
 	}
 
