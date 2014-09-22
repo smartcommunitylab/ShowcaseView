@@ -54,7 +54,6 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 	private Parcelable[] mItemArray = null;
 	private int mPosition = 0;
 
-	@SuppressLint("NewApi")
 	public static void newIstance(Activity ctx, TutorialItem[] items,
 			Integer titleColor, Integer descColor,Integer backColor, Integer color, Integer exitButtonColor,
 			int requestCode) {
@@ -67,10 +66,15 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 		if (exitButtonColor != null)
 			caller.putExtra(PASSED_EXIT_BUTTON_COLOR, exitButtonColor);
 		
-		if(android.os.Build.VERSION.SDK_INT>4)
-			ctx.overridePendingTransition(R.anim.tut_fade_in,R.anim.tut_fade_out);
+		animateOut(ctx);
 		
 		ctx.startActivityForResult(caller, requestCode);
+	}
+
+	@SuppressLint("NewApi")
+	private static void animateOut(Activity ctx) {
+		if(android.os.Build.VERSION.SDK_INT>4)
+			ctx.overridePendingTransition(R.anim.tut_fade_in,R.anim.tut_fade_out);
 	}
 
 	public static void newIstance(Activity ctx, TutorialItem[] items,
@@ -94,6 +98,7 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		setResult(RESULT_CANCELED);
+		animateOut(this);
 		this.finish();
 	}
 
@@ -101,6 +106,7 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 	protected void onPause() {
 		super.onPause();
 		setResult(RESULT_CANCELED);
+		animateOut(this);
 		this.finish();
 	}
 
@@ -177,8 +183,8 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 
 	public void skipTutorial(View v) {
 		setResult(RESULT_CANCELED);
+		animateOut(this);
 		this.finish();
-
 	}
 
 	@SuppressLint("NewApi")
