@@ -94,6 +94,7 @@ public class ShowcaseView extends RelativeLayout implements
 	private int mShowCaseColor;
 	private Paint mPainterCircle;
 	private Paint mPaintBlur;
+	private Rect mShowcaseRect;
 
 	public ShowcaseView(Context context) {
 		this(context, null, R.styleable.CustomTheme_showcaseViewStyle);
@@ -539,38 +540,52 @@ public class ShowcaseView extends RelativeLayout implements
 	 * @return
 	 */
 	private float[] getBestTextPosition(int canvasW, int canvasH) {
-
-		// if the width isn't much bigger than the voided area, just consider
-		// top & bottom
-		float spaceTop = voidedArea.top;
-		float spaceBottom = canvasH - voidedArea.bottom - 64 * metricScale; // 64dip
-																			// considers
-																			// the
-																			// OK
-																			// button
-
-		float x = 24 * metricScale; // place it on the left
+		
+//		// if the width isn't much bigger than the voided area, just consider
+//		// top & bottom
+//		float spaceTop = voidedArea.top;
+//		float spaceBottom = canvasH - voidedArea.bottom - 64 * metricScale; // 64dip
+//																			// considers
+//																			// the
+//																			// OK
+//																			// button
+//
+//		float x = 24 * metricScale; // place it on the left
+//		float y = 24 * metricScale;
+//		// manage the case where the showcase use all the screen height
+//		if (voidedArea.bottom >= canvasH) {
+//			y = canvasH / 2 - 16 * metricScale; // in at the center of the screen
+//			// if the showcase is on the left
+//			if (voidedArea.right <= (canvasW / 2 + 48 * metricScale))
+//				x = canvasW / 2 - 24 * metricScale; // place it on the right
+//		} else if (spaceTop > spaceBottom)
+//			y = 128 * metricScale;
+//		else if (canvasH / 2 < voidedArea.bottom)
+//			y = canvasH / 2 + 16 * metricScale; // in at the center of the
+//												// screen
+//		else
+//			y = 24 * metricScale + voidedArea.bottom;
+//		// return new float[]{24 * metricScale, spaceTop > spaceBottom ? 128 *
+//		// metricScale : 24 * metricScale + voidedArea.bottom, canvasW - 48 *
+//		// metricScale};
+	
+		float x = 16 * metricScale; // place it on the left
 		float y = 24 * metricScale;
-		// manage the case where the showcase use all the screen height
-		if (voidedArea.bottom >= canvasH) {
-			y = canvasH / 2 - 8 * metricScale; // in at the center of the screen
-			if (voidedArea.right <= (canvasW / 2 + 48 * metricScale))// if the
-																		// showcase
-																		// is on
-																		// the
-																		// left
-				x = canvasW / 2 - 24 * metricScale; // place it on the right
-		} else if (spaceTop > spaceBottom)
-			y = 128 * metricScale;
-		else if (canvasH / 2 < voidedArea.bottom)
-			y = canvasH / 2 + 16 * metricScale; // in at the center of the
-												// screen
-		else
-			y = 24 * metricScale + voidedArea.bottom;
-		// return new float[]{24 * metricScale, spaceTop > spaceBottom ? 128 *
-		// metricScale : 24 * metricScale + voidedArea.bottom, canvasW - 48 *
-		// metricScale};
-		return new float[] { x, y, canvasW - 48 * metricScale };
+		float padding = 16* metricScale;
+		if(voidedArea.top>=padding && voidedArea.bottom>=(canvasH/2 - padding)){
+			y = Math.max(voidedArea.top-padding, canvasH-voidedArea.bottom+padding);
+		}
+		else if(voidedArea.bottom>=canvasH/2){
+			//e' sotto
+			y = canvasH / 2 + padding;
+		}
+		else if ((voidedArea.top<=(canvasH/2))){
+			//in alto
+			y = canvasH / 2 - padding;
+		}
+
+		return new float[] { x, y, canvasW - 24 * metricScale };
+		
 
 	}
 
@@ -1022,7 +1037,7 @@ public class ShowcaseView extends RelativeLayout implements
 		public boolean hideOnClickOutside = false;
 		public int color = Color.parseColor("#33b5e5");
 		public int exitButtonColor = Color.parseColor("#33b5e5");
-		public int backColor = Color.argb(225, 50, 50, 50);
+		public int backColor = Color.argb(235, 50, 50, 50);
 		public int titleTextColor = Color.parseColor("#49C0EC");
 		public int detailTextColor = Color.WHITE;
 		public String buttonText;

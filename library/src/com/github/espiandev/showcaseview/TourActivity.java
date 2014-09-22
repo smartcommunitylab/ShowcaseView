@@ -54,6 +54,7 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 	private Parcelable[] mItemArray = null;
 	private int mPosition = 0;
 
+	@SuppressLint("NewApi")
 	public static void newIstance(Activity ctx, TutorialItem[] items,
 			Integer titleColor, Integer descColor,Integer backColor, Integer color, Integer exitButtonColor,
 			int requestCode) {
@@ -65,6 +66,10 @@ public class TourActivity extends Activity implements OnShowcaseEventListener {
 			caller.putExtra(PASSED_COLOR, color);
 		if (exitButtonColor != null)
 			caller.putExtra(PASSED_EXIT_BUTTON_COLOR, exitButtonColor);
+		
+		if(android.os.Build.VERSION.SDK_INT>4)
+			ctx.overridePendingTransition(R.anim.tut_fade_in,R.anim.tut_fade_out);
+		
 		ctx.startActivityForResult(caller, requestCode);
 	}
 
